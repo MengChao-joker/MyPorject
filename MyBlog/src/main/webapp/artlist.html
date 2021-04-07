@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的文章列表页</title>
+    <script src="jquery-1.9.1.min.js"></script>
+    <script>
+        // 文章删除操作
+        function mydel(id){
+            if (confirm("确认删除？")) {
+                //请求后端接口删除响应的数据
+                jQuery.getJSON("mydel",{"id":id},function (data) {
+                    if(data!=null&&data.succ==1){
+                        alert("恭喜，删除成功！");
+                        location.href = location.href;
+                    }else {
+                        alert("抱歉，删除失败，请重试！");
+                    }
+
+                })
+            }
+        }
+
+
+        jQuery(function () {
+            // 等页面加载完成之后再执行
+
+            jQuery.getJSON("myal", {}, function (data) {
+                if (data != null && data.list != null) {
+                    // table 数据初始化
+                    jQuery("#tab").html("<tr>\n" +
+                        "    <td>\n" +
+                        "        编号\n" +
+                        "    </td>\n" +
+                        "    <td>\n" +
+                        "        标题\n" +
+                        "    </td>\n" +
+                        "    <td>\n" +
+                        "        创建时间\n" +
+                        "    </td>\n" +
+                        "    <td>\n" +
+                        "        阅读量\n" +
+                        "    </td>\n" +
+                        "    <td>\n" +
+                        "        操作\n" +
+                        "    </td>\n" +
+                        "</tr>");
+                    // 数据拼接
+                    var html = "";
+                    for (var i = 0; i < data.list.length; i++) {
+                        var articleinfo = data.list[i];
+                        html += "<tr>\n" +
+                            "            <td>\n" +
+                            articleinfo.id + "\n" +
+                            "            </td>\n" +
+                            "            <td>\n" +
+                            articleinfo.title + "\n" +
+                            "            </td>\n" +
+                            "            <td>\n" +
+                            articleinfo.createtime + "                \n" +
+                            "            </td>\n" +
+                            "            <td>\n" +
+                            articleinfo.rcount + "                \n" +
+                            "            </td>\n" +
+                            "            <td>\n" +
+                            "                <a href='upart.html?id="+articleinfo.id+"'>修改</a> " +
+                            "<a href='javascript:mydel("+articleinfo.id+");'>删除</a>\n" +
+                            "            </td>\n" +
+                            "        </tr>";
+                    }
+                    jQuery("#tab").append(html);
+                } else {
+                    alert("抱歉：请先登录！");
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<div style="text-align: center;margin-top: 50px;">
+    <h1>我的文章列表</h1>
+    <a href="addart.html">添加文章</a>
+    <hr>
+    <table id="tab" style="width: 80%;margin-left: 140px;" border="1" cellspacing="0">
+        <tr>
+            <td>
+                编号
+            </td>
+            <td>
+                标题
+            </td>
+            <td>
+                创建时间
+            </td>
+            <td>
+                阅读量
+            </td>
+            <td>
+                操作
+            </td>
+        </tr>
+
+    </table>
+</div>
+
+</body>
+</html>
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>我的文章列表页</title>-->
+<!--    <script src=jquery-1.9.1.min.js></script>-->
+<!--&lt;!&ndash;        <script>&ndash;&gt;-->
+<!--&lt;!&ndash;            //文章删除操作&ndash;&gt;-->
+<!--&lt;!&ndash;            function mydel(id) {&ndash;&gt;-->
+<!--&lt;!&ndash;                if(confirm("确认删除？")) {&ndash;&gt;-->
+<!--&lt;!&ndash;                    //请求后端接口删除相应的数据&ndash;&gt;-->
+<!--&lt;!&ndash;                    jQuery.getJSON("mydel",{"id",id},function (data) {&ndash;&gt;-->
+<!--&lt;!&ndash;                        if(data!=null&&data.succ==1){&ndash;&gt;-->
+<!--&lt;!&ndash;                            alert("操作成功！");&ndash;&gt;-->
+<!--&lt;!&ndash;                            location.href=location.href;&ndash;&gt;-->
+<!--&lt;!&ndash;                        }else{&ndash;&gt;-->
+<!--&lt;!&ndash;                            alert("操作失败，请重试！");&ndash;&gt;-->
+<!--&lt;!&ndash;                        }&ndash;&gt;-->
+<!--&lt;!&ndash;                    });&ndash;&gt;-->
+<!--&lt;!&ndash;                }&ndash;&gt;-->
+<!--&lt;!&ndash;                }&ndash;&gt;-->
+<!--&lt;!&ndash;        </script>&ndash;&gt;-->
+<!--    <script>-->
+<!--        jQuery(function () {-->
+<!--            //等页面加载完成后再执行-->
+<!--            jQuery.getJSON("myal", {}, function (data) {-->
+<!--                if (data != null && data.list != null&&data.list.length>=1) {-->
+<!--                    //table初始化-->
+<!--                    jQuery("#tab").html("<tr>" + "<td>" + "编号" + "</td>"-->
+<!--                        + "<td>" + "标题" + "</td>"-->
+<!--                        + "<td>" + "创建时间" + "</td>"-->
+<!--                        + "<td>" + "阅读量" + "</td>" +-->
+<!--                        "<td>" + "操作" + "</td>" + "/<tr>");-->
+<!--                    //数据拼接-->
+<!--                    var html = "";-->
+<!--                    for (var i = 0; i < data.list.length; i++) {-->
+<!--                        // var articleinfo = data.list[i];-->
+<!--                        html+=("<tr>" + "<td>" + articleinfo.id + "</td>"-->
+<!--                            + "<td>" + articleinfo.title + "</td>"-->
+<!--                            + "<td>" + articleinfo.createtime + "</td>"-->
+<!--                            + "<td>" + articleinfo.rcount + "</td>" +-->
+<!--                            "<td>" + "修改 删除"-->
+<!--                            + "</td>" + "/<tr>");-->
+<!--                    }-->
+<!--                    jQuery("#tab").append(html);-->
+<!--                } else {-->
+<!--                    alert("抱歉，请先登录！")-->
+<!--                }-->
+
+<!--            })-->
+
+<!--        });-->
+<!--    </script>-->
+<!--</head>-->
+<!--<body>-->
+<!--<div style="margin-top: 50px;text-align: center;">-->
+<!--    <h1>我的文章列表</h1>-->
+<!--    <a href="addart.html">添加文章</a>-->
+<!--    <hr>-->
+<!--    <table id="tab" style="width: 80%;margin-left: 140px; margin-top: 100px" border="1" cellspacing="0">-->
+<!--        <tr>-->
+<!--            <td>编号</td>-->
+<!--            <td>标题</td>-->
+<!--            <td>创建时间</td>-->
+<!--            <td>阅读量</td>-->
+<!--            <td>操作</td>-->
+<!--        </tr>-->
+<!--    </table>-->
+
+<!--</div>-->
+
+<!--</body>-->
+<!--</html>-->

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>添加文章</title>
+    <script src=jquery-1.9.1.min.js></script>
+    <script>
+        //查询操作
+        //upart.html?id=articleinfo.id
+        //从url中获得文章id
+        var id=0;
+        jQuery(function () {
+            var thisParam = location.search.substring(1);
+            id = thisParam.split("=")[1];
+            jQuery.getJSON("showart", {"id": id}, function (data) {
+                if (data != null && data.state == 1) {
+                    var articleinfo = data.articleinfo;
+                    jQuery("#title").val(articleinfo.title);
+                    jQuery("#content").val(articleinfo.text);
+                } else {
+                    alert("查询失败" + data.msg);
+                }
+            });
+        });
+
+        function mysub(type) {
+            var title = jQuery("#title");
+            var content = jQuery("#content");
+            if (type == 2) {
+                //清空操作
+                if (confirm("确认清空？")) {
+                    title.val("");
+                    content.val("");
+                }
+                return false;
+            }
+            //判空
+            if (title.val() == "") {
+                alert("请先输入标题！")
+                title.focus();
+                return false;
+            }
+            if (content.val() == "") {
+                alert("请先输入正文！")
+                content.focus();
+                return false;
+            }
+            //修改操作
+            jQuery.getJSON("upart", {
+                    "title": title.val(), "content": content.val()
+                    , "id": id
+                },
+                function (data) {
+                    if (data != null && data.succ == 1) {
+                        alert("恭喜，修改成功！");
+                        location.href = "artlist.html";
+                    } else {
+                        alert("操作失败" + data.msg);
+                    }
+
+                });
+
+        }
+
+    </script>
+</head>
+<body>
+<div>
+    <H1>文章添加</H1>
+    标题:<input id="title" name="title" type="text">
+    <p></p>
+    正文:<textarea style="width: 50%;height: 300px"
+                 id="content" name="content"></textarea>
+    <p></p>
+    <input type="button" value=" 提 交 " onclick="mysub(1)">
+    <input type="button" value=" 清 空 " onclick="mysub(2)">
+
+</div>
+
+</body>
+</html>
