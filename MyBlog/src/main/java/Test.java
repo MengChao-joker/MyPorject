@@ -2,13 +2,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import models.UserInfo;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class Test {
     public static void main(String[] args) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        Date date = new Date();
+        System.out.println(simpleDateFormat.format(date));
+    }
+    public static void main2(String[] args) {
         System.out.println(true?3:4);
     }
     public static void main1(String[] args) throws JsonProcessingException {

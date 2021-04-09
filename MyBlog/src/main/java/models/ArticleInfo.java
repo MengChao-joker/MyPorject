@@ -13,7 +13,7 @@ import java.util.Date;
 public class ArticleInfo {
     int id;
     String title;
-    String text;
+    String content;
     Date createtime;
     Date updatetime;
     int uid;
@@ -32,30 +32,16 @@ public class ArticleInfo {
         return title;
     }
 
-    @Override
-    public String toString() {
-        return "ArticleInfo{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", text='" + text + '\'' +
-                ", createtime=" + createtime +
-                ", updatetime=" + updatetime +
-                ", uid=" + uid +
-                ", rcount=" + rcount +
-                ", state=" + state +
-                '}';
-    }
-
     public void setTitle(String title) {
         this.title = title;
     }
 
-    public String getText() {
-        return text;
+    public String getContent() {
+        return content;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public Date getCreatetime() {

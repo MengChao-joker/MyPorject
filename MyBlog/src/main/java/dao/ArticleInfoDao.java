@@ -1,6 +1,8 @@
 package dao;
 
 import models.ArticleInfo;
+import models.ArticleInfoVO;
+import sun.security.pkcs11.Secmod;
 import utils.DBUtils;
 
 import java.sql.Connection;
@@ -22,7 +24,7 @@ public class ArticleInfoDao {
             ArticleInfo articleInfo = new ArticleInfo();
             articleInfo.setId(resultSet.getInt("id"));
             articleInfo.setTitle(resultSet.getString("title"));
-            articleInfo.setText(resultSet.getString("content"));
+            articleInfo.setContent(resultSet.getString("content"));
             articleInfo.setCreatetime(resultSet.getDate("createtime"));
             articleInfo.setUpdatetime(resultSet.getDate("updatetime"));
             articleInfo.setRcount(resultSet.getInt("rcount"));
@@ -79,9 +81,59 @@ public class ArticleInfoDao {
         ResultSet resultSet = statement.executeQuery();
         while(resultSet.next()){
             articleInfo.setTitle(resultSet.getString("title"));
-            articleInfo.setText(resultSet.getString("content"));
+            articleInfo.setContent(resultSet.getString("content"));
         }
         DBUtils.close(connection,statement,resultSet);
         return articleInfo;
+    }
+
+    public List<ArticleInfoVO> getAllList(int psize,int cpage) throws SQLException {
+        List<ArticleInfoVO> list = new ArrayList<>();
+        Connection connection = DBUtils.getConnect();
+        String sql = "select a.*,u.username from articleinfo as a left join userinfo as u on a.uid = u.id limit ?,?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setInt(1,(cpage-1)*psize);
+        statement.setInt(2,psize);
+        ResultSet resultSet = statement.executeQuery();
+        while(resultSet.next()){
+            ArticleInfoVO articleInfoVO = new ArticleInfoVO();
+            articleInfoVO.setId(resultSet.getInt("id"));
+            articleInfoVO.setTitle(resultSet.getString("title"));
+            articleInfoVO.setUsername(resultSet.getString("username"));
+            articleInfoVO.setRcount(resultSet.getInt("rcount"));
+            articleInfoVO.setCreatetime(resultSet.getDate("createtime"));
+            list.add(articleInfoVO);
+        }
+        DBUtils.close(connection,statement,resultSet);
+        return list;
+    }
+//查看文章详情
+    public ArticleInfoVO getDetail(int id) throws SQLException {
+        ArticleInfoVO articleInfoVO = new ArticleInfoVO();
+        Connection connection = DBUtils.getConnect();
+        String sql = " select a.*,u.username from articleinfo a left join userinfo u on a.uid=u.id where a.id=?;";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setInt(1,id);
+        ResultSet resultSet = statement.executeQuery();
+        while(resultSet.next()){
+            articleInfoVO.setRcount(resultSet.getInt("rcount"));
+            articleInfoVO.setUsername(resultSet.getString("username"));
+            articleInfoVO.setCreatetime(resultSet.getDate("createtime"));
+            articleInfoVO.setTitle(resultSet.getString("title"));
+            articleInfoVO.setContent(resultSet.getString("content"));
+        }
+        DBUtils.close(connection,statement,resultSet);
+        return articleInfoVO;
+    }
+//访问量+1
+    public int upCount(int id) throws SQLException {
+        int result = -1;
+        Connection connection = DBUtils.getConnect();
+        String sql = " update articleinfo set rcount = rcount+1 where id = ?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setInt(1,id);
+        result = statement.executeUpdate();
+        DBUtils.close(connection,statement,null);
+        return result;
     }
 }

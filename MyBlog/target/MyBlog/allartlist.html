@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>所有文章列表</title>
+</head>
+<script src = jquery-1.9.1.min.js></script>
+<script>
+    //全局参数：当前页
+    var currentpage = 1;
+
+    //时间格式化
+    function datefm(timespan){
+        var date = new Date(timespan);
+        //获取年份
+        var y = date.getFullYear();
+        var m = date.getMonth()+1;
+        var d = date.getDate();
+        return y+"-"+m+"-"+d;
+    }
+    //查询所有文章
+    var myparams = location.search;
+    if(myparams!=""){
+        currentpage = parseInt(myparams.split("=")[1]);
+    }
+    jQuery.getJSON("allartlist",{"currentpage":currentpage,
+                                    "psize":2},function (data) {
+        if(data!=null&&data.succ==1){
+            var html = "";
+            for(var i = 0;i<data.list.length;i++){
+                var art = data.list[i];
+                html+="<tr>\n" +
+                    "            <td>"+art.id+"</td>\n" +
+                    "            <td>"+"<a href='detail.html?id="+art.id+"'>"+art.title+"</a>"+"</td>\n" +
+                    "            <td>"+art.username+"</td>\n" +
+                    "            <td>"+art.rcount+"</td>\n" +
+                    "            <td>"+art.createtime+"</td>\n" +
+                    "        </tr>"
+            }
+            jQuery("#tab").append(html);
+        }else {
+            alert("查询有误"+data.msg);
+        }
+    })
+    function mypage(type) {
+        if(type==1){
+            //下一页操作
+            location.href = "allartlist.html?c="+(currentpage+1);
+        }else{
+            //上一页操作
+            if(currentpage!=1){
+                location.href = "allartlist.html?c="+(currentpage-1);
+            }else {
+                alert("当前已是首页！");
+            }
+        }
+
+    }
+</script>
+<body>
+<div style="text-align: center">
+    <h1>文章列表</h1>
+    <table id="tab" style="width: 80%;margin-left: 160px" cellspacing="0" border="1">
+        <tr>
+            <td>编号</td>
+            <td>标题</td>
+            <td>作者</td>
+            <td>阅读量</td>
+            <td>创建时间</td>
+        </tr>
+    </table>
+    <p></p>
+    <a href="javascript:mypage(2)">上一页</a>
+    <a href="javascript:mypage(1)">下一页</a>
+</div>
+</body>
+</html>

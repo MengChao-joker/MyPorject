@@ -16,7 +16,7 @@
                 if (data != null && data.state == 1) {
                     var articleinfo = data.articleinfo;
                     jQuery("#title").val(articleinfo.title);
-                    jQuery("#content").val(articleinfo.text);
+                    jQuery("#content").val(articleinfo.content);
                 } else {
                     alert("查询失败" + data.msg);
                 }

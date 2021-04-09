@@ -5,6 +5,14 @@
     <title>我的文章列表页</title>
     <script src="jquery-1.9.1.min.js"></script>
     <script>
+        //时间格式化
+        function timefm(timeStamp) {
+            var date = new Date();
+            var y = date.getFullYear();
+            var m = date.getMonth()+1;
+            var d = date.getDate();
+            return y+"-"+m+"-"+d;
+        }
         // 文章删除操作
         function mydel(id){
             if (confirm("确认删除？")) {
@@ -20,8 +28,6 @@
                 })
             }
         }
-
-
         jQuery(function () {
             // 等页面加载完成之后再执行
 
@@ -54,10 +60,10 @@
                             articleinfo.id + "\n" +
                             "            </td>\n" +
                             "            <td>\n" +
-                            articleinfo.title + "\n" +
+                            "<a href='detail.html?id="+articleinfo.id+"'>"+articleinfo.title+"</a>"+ "\n" +
                             "            </td>\n" +
                             "            <td>\n" +
-                            articleinfo.createtime + "                \n" +
+                            timefm(articleinfo.createtime) + "                \n" +
                             "            </td>\n" +
                             "            <td>\n" +
                             articleinfo.rcount + "                \n" +
@@ -80,6 +86,7 @@
 <div style="text-align: center;margin-top: 50px;">
     <h1>我的文章列表</h1>
     <a href="addart.html">添加文章</a>
+    <a href="allartlist.html">主页文章</a>
     <hr>
     <table id="tab" style="width: 80%;margin-left: 140px;" border="1" cellspacing="0">
         <tr>
