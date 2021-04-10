@@ -6,9 +6,8 @@
     <script src = jquery-1.9.1.min.js></script>
     <script>
         //时间格式化
-        function datefm(timespan){
-            var date = new Date(timespan);
-            //获取年份
+        function timefm(timeStamp) {
+            var date = new Date();
             var y = date.getFullYear();
             var m = date.getMonth()+1;
             var d = date.getDate();
@@ -23,7 +22,7 @@
                 var art = data.art;
                 jQuery("#title").html(art.title);
                 jQuery("#content").html(art.content);
-                jQuery("#createtime").html(datefm(art.createtime));
+                jQuery("#createtime").html(timefm(art.createtime));
                 jQuery("#username").html(art.username);
                 jQuery("#rcount").html(art.rcount);
             }else {

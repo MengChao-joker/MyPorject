@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>登陆页面</title>
+    <script src="jquery-1.9.1.min.js"></script>
+    <script>
+        function mysub(type) {
+            var username = jQuery("#username");
+            var password = jQuery("#password");
+            if(type==2){
+                if(confirm("是否清空？")){
+                    username.val("");
+                    password.val("");
+                }
+                return false;
+            }
+            if(username.val().trim()==""){
+                alert("请先输入用户名~~");
+                username.focus();
+                return false;
+            }
+            if(password.val().trim()==""){
+                alert("请先输入密码~~");
+                password.focus();
+                return false;
+            }
+            //向后端发送getJSON请求
+            jQuery.getJSON("login",{"username":username.val(),"password":password.val()},
+            function (data) {
+                if(data!=null&&data.state){
+                    alert("登陆成功~~");
+                    //参数不能传递
+                    location.href='myartlist.html?c=1';
+                }else {
+                    alert("登陆失败"+msg);
+                }
+            });
+
+        }
+    </script>
+</head>
+<body>
+<h1><a href="pubartlist.html">主页列表</a></h1>
+<div style="margin-top: 70px;text-align: center;">
+    <h1>登录</h1>
+    用户名<input id="username" name="username" type="text"><p></p>
+    &nbsp;密&nbsp;&nbsp;码<input id="password" name="password" type="password"><p></p>
+    <input id="1" type="button" onclick="mysub(1)" value=" 提 交 ">
+    <input id="2" type="button" onclick="mysub(2)" value=" 清 空 ">
+</div>
+</body>
+</html>

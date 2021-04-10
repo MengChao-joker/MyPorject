@@ -10,9 +10,8 @@
     var currentpage = 1;
 
     //时间格式化
-    function datefm(timespan){
-        var date = new Date(timespan);
-        //获取年份
+    function timefm(timeStamp) {
+        var date = new Date();
         var y = date.getFullYear();
         var m = date.getMonth()+1;
         var d = date.getDate();

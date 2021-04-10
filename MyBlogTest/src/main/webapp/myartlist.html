@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的主页</title>
+    <script src="jquery-1.9.1.min.js"></script>
+    <script>
+        var psize = 2;
+        var curpage = 0;
+        //时间格式化
+        function datesub(timestamp) {
+            var date = new Date();
+            var y = date.getFullYear();
+            var m = date.getMonth();
+            var d = date.getDate();
+            var t = date.getHours();
+            return y + "-" + m + "-" + d;
+        }
+        //注销账号
+        function logout() {
+            if(confirm("确认注销？")) {
+                jQuery.getJSON("logout", {}, function (data) {
+                    if (data != null && data.state == 200) {
+                        alert("注销成功~~");
+                        location.href="pubartlist.html";
+                    }else {
+                        alert("注销失败~~"+data.msg);
+                    }
+                });
+            }else {
+                alert("嘿嘿~~舍不得~~^-^");
+            }
+        }
+//文章删除
+        function mydel(id) {
+            if (confirm("确认删除？")) {
+                jQuery.getJSON("del", {"id": id}, function (data) {
+                    if (data != null && data.state == 200) {
+                        location.href = location.href;
+                    } else {
+                        alert("删除失败~~");
+                    }
+
+                })
+            }
+        }
+        //翻页操作
+        function mypage(type){
+            if(type==1){
+                //上一页
+                if(curpage==1){
+                    alert("已经是首页了~~");
+                    return false;
+                }
+                location.href = "myartlist.html?c="+(curpage-1);
+            }
+            if(type==2){
+                //下一页
+                location.href = "myartlist.html?c="+(curpage+1);
+            }
+        }
+//文章加载
+        jQuery(function () {
+            if(location.search!=""){
+                curpage = parseInt(location.search.split("=")[1]);
+            }else {
+                curpage = 1;
+            }
+            jQuery.getJSON("myal", {"psize":psize,"curpage":curpage},
+                function (data) {
+                    if (data != null && data.state == 200 && data.list != null) {
+                        var html = "";
+                        for (var i = 0; i < data.list.length; i++) {
+                            var art = data.list[i];
+                            html += "<tr>\n" +
+                                "            <td>" + art.id + "</td>\n" +
+                                "            <td>" + "<a href='detail.html?id="+art.id+"'>"+art.title+"</a>" + "</td>\n" +
+                                "            <td>" + datesub(art.createtime) + "</td>\n" +
+                                "            <td><a href='upart.html?id=" + art.id + "'>修改</a> " +
+                                "<a href='javascript:mydel(" + art.id + ")'> 删除</a></td>\n" +
+                                "        </tr>"
+                        }
+                        jQuery("#tab").append(html);
+
+                    } else {
+                        alert("操作失败"+data.msg);
+                    }
+                })
+        });
+
+    </script>
+</head>
+<body>
+<h1><a href="javascript:logout()">注销</a></h1>
+<div style="text-align: center;margin-top: 70px">
+    <h1>个人文章列表</h1>
+    <a href="addart.html">添加文章</a>
+    <a href="pubartlist.html">主页列表</a>
+    <p></p>
+    <table id="tab" style="margin-left: 220px" border="1" cellspacing="0" width="70%">
+        <tr>
+            <td>编号</td>
+            <td>标题</td>
+            <td>创建时间</td>
+            <td>操作</td>
+        </tr>
+    </table>
+    <p></p>
+    <a href="javascript:mypage(1)">上一页</a><a href="javascript:mypage(2)">下一页</a>
+</div>
+
+</body>
+</html>

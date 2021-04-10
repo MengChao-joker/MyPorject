@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文章详情</title>
+    <script src="jquery-1.9.1.min.js"></script>
+    <script>
+        function datesub(timestamp) {
+            var date = new Date();
+            var y = date.getFullYear();
+            var m = date.getMonth();
+            var d = date.getDate();
+            var t = date.getHours();
+            return y + "-" + m + "-" + d;
+        }
+
+        jQuery(function () {
+            var title = jQuery("#title");
+            var content = jQuery("#content");
+            var time = jQuery("#time");
+            var username = jQuery("#username");
+            var rcount = jQuery("#rcount");
+            var id = location.search.split("=")[1];
+            jQuery.getJSON("detail", {"id": id}, function (data) {
+                if (data != null && data.art != null && data.state == 200) {
+                    var art = data.art;
+                    title.val(art.title);
+                    content.html(art.content);
+                    time.html(datesub(art.createtime));
+                    username.html(art.username);
+                    rcount.html(art.rcount);
+                } else {
+                    alert("操作失败" + data.msg);
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+<div style="margin-left: 70px">
+    <h1>文章详情</h1>
+    <h2>标题:<input id="title" name="title"></h2>
+    <p></p>
+    正文:<P></P>
+    <textarea style="width: 50%;height: 300px" id="content" name="content">
+</textarea>
+    <p></p>
+    作者:&nbsp;<span id="username"></span>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    创建时间:&nbsp;<span id="time"></span>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    阅读量:&nbsp;<span id="rcount"></span>
+</div>
+
+</body>
+</html>
