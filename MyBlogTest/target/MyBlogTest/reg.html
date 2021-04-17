@@ -34,10 +34,15 @@
                     password2.focus();
                     return false;
                 }
+                if(password.val().trim().length<6) {
+                    alert("密码长度不能少于6位~~");
+                    password.focus();
+                    return false;
+                }
                 jQuery.getJSON("reg",{"username":username.val(),
                         "password":password.val()},
                     function (data) {
-                        if(data!=null&&data.state==200){
+                            if(data!=null&&data.state==200){
                             alert("注册成功！");
                             location.href = 'login.html';
                         }else {

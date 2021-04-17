@@ -5,6 +5,8 @@
     <title>文章详情</title>
     <script src="jquery-1.9.1.min.js"></script>
     <script>
+        //当前文章ID
+        var id = location.search.split("=")[1];
         function datesub(timestamp) {
             var date = new Date();
             var y = date.getFullYear();
@@ -13,6 +15,33 @@
             var t = date.getHours();
             return y + "-" + m + "-" + d;
         }
+        //收藏功能
+        function favorite(){
+            if(confirm("确认收藏？")) {
+                var title = jQuery("#title");
+                var content = jQuery("#content");
+                var username = jQuery("#username");
+                jQuery.getJSON("favorite", {
+                    "title": title.val(),
+                    "content": content.val(),
+                    "username": username.html(),
+                    "id": id
+                }, function (data) {
+                    if (data != null && data.state == 200) {
+                        alert("收藏成功~~");
+                    } else if(data.state==100){
+                        alert("已收藏，不能重复添加~~")
+                    }else {
+                        alert("操作失败~~" + data.msg);
+                    }
+                });
+            }
+
+        }
+        //回滚上一级
+        function back(){
+            self.location = document.referrer;
+        }
 
         jQuery(function () {
             var title = jQuery("#title");
@@ -20,7 +49,6 @@
             var time = jQuery("#time");
             var username = jQuery("#username");
             var rcount = jQuery("#rcount");
-            var id = location.search.split("=")[1];
             jQuery.getJSON("detail", {"id": id}, function (data) {
                 if (data != null && data.art != null && data.state == 200) {
                     var art = data.art;
@@ -50,6 +78,10 @@
     创建时间:&nbsp;<span id="time"></span>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     阅读量:&nbsp;<span id="rcount"></span>
+    <p></p>
+    <a href='javascript:favorite()'>收藏</a>
+    <a href='javascript:back()'>返回</a>
+
 </div>
 
 </body>

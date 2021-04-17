@@ -1,7 +1,5 @@
 package utils;
 
-
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.servlet.http.HttpServletResponse;

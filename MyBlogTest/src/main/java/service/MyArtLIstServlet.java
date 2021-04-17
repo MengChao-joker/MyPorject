@@ -2,6 +2,7 @@ package service;
 
 import dao.ArticleInfoDao;
 import models.ArticleInfo;
+import models.ArticleInfoVO;
 import models.UserInfo;
 import utils.RespUtils;
 
@@ -23,6 +24,7 @@ public class MyArtLIstServlet extends HttpServlet {
         int state = -1;
         String msg = "";
         List<ArticleInfo> list = null;
+        String username = "";
         int uid = 0;
         int psize = Integer.parseInt(req.getParameter("psize"));
         int curpage = Integer.parseInt(req.getParameter("curpage"));
@@ -35,6 +37,7 @@ public class MyArtLIstServlet extends HttpServlet {
             ArticleInfoDao articleInfoDao = new ArticleInfoDao();
             try {
                 list = articleInfoDao.getArtList(uid,curpage,psize);
+                username = articleInfoDao.getUserName(uid);
                 state = 200;
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
@@ -47,6 +50,7 @@ public class MyArtLIstServlet extends HttpServlet {
         res.put("state", state);
         res.put("msg", msg);
         res.put("list", list);
+        res.put("username",username);
         RespUtils.Resp(resp, res);
     }
 

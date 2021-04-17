@@ -2,6 +2,7 @@ package dao;
 
 import models.ArticleInfo;
 import models.ArticleInfoVO;
+import models.Favorite;
 import utils.DBUtils;
 import utils.RespUtils;
 
@@ -66,6 +67,7 @@ public class ArticleInfoDao {
         statement.setInt(1, id);
         statement1.setInt(1, id);
         ResultSet resultSet = statement.executeQuery();
+        statement1.executeUpdate();
         ArticleInfoVO articleInfoVO = new ArticleInfoVO();
         if (resultSet.next()) {
             articleInfoVO.setUsername(resultSet.getString("username"));
@@ -106,7 +108,7 @@ public class ArticleInfoDao {
     //添加文章
     public int addArt(String title, String content, int uid) throws SQLException {
         Connection connection = DBUtils.getConnect();
-        String sql = "insert into articleinfo(title,content,uid) values(?,?,?)";
+        String sql = "insert into articleinfo(title,content,uid,rcount) values(?,?,?,1)";
         PreparedStatement statement = connection.prepareStatement(sql);
         statement.setString(1, title);
         statement.setString(2, content);
@@ -125,6 +127,36 @@ public class ArticleInfoDao {
         result = statement.executeUpdate();
         DBUtils.close(connection,statement,null);
         return result;
+    }
+
+    public String getUserName(int uid) throws SQLException {
+        String name = "";
+        Connection connection = DBUtils.getConnect();
+        String sql = "select username from userinfo where id = ?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setInt(1,uid);
+        ResultSet resultSet = statement.executeQuery();
+        while(resultSet.next()){
+            name = resultSet.getString("username");
+        }
+        return name;
+    }
+
+    public List<Favorite> getFavoList(int uid) throws SQLException {
+        List<Favorite> list = new ArrayList<>();
+        Connection connection = DBUtils.getConnect();
+        String sql = "select * from favorite where uid = ?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+        statement.setInt(1,uid);
+        ResultSet resultSet = statement.executeQuery();
+        while(resultSet.next()){
+            Favorite favorite = new Favorite();
+            favorite.setUsername(resultSet.getString("username"));
+            favorite.setTitle(resultSet.getString("title"));
+            favorite.setCreatetime(resultSet.getDate("createtime"));
+            list.add(favorite);
+        }
+        return list;
     }
 }
 

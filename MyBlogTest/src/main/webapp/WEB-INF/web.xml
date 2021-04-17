@@ -7,6 +7,14 @@
          metadata-complete="false">
 //注册路由
   <servlet>
+    <servlet-name>test</servlet-name>
+    <servlet-class>service.Test</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>test</servlet-name>
+    <url-pattern>/test</url-pattern>
+  </servlet-mapping>
+  <servlet>
     <servlet-name>reg</servlet-name>
     <servlet-class>service.RegServlet</servlet-class>
   </servlet>

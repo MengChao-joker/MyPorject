@@ -34,14 +34,24 @@ public class RegServlet extends HttpServlet {
             userInfo.setPassword(password);
             UserInfoDao userInfoDao = new UserInfoDao();
             try {
-                state = userInfoDao.reg(userInfo)>0?200:100;
+                if (userInfoDao.isRepeat(userInfo) != -1) {
+                    try {
+                        state = userInfoDao.reg(userInfo) > 0 ? 200 : 100;
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+
+
+                } else{
+                    msg = "用户名已存在！";
+                }
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
-        }else {
-            //参数有误！
-            msg = "参数有误！";
-        }
+        }else{
+                //参数有误！
+                msg = "参数有误！";
+            }
         //3.返回结果给前端
 //        response.setCharacterEncoding("utf-8");
 //        response.setContentType("applicant/json");

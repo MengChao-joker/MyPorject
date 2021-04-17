@@ -28,12 +28,12 @@
             //向后端发送getJSON请求
             jQuery.getJSON("login",{"username":username.val(),"password":password.val()},
             function (data) {
-                if(data!=null&&data.state){
+                if(data!=null&&data.state==200){
                     alert("登陆成功~~");
                     //参数不能传递
-                    location.href='myartlist.html?c=1';
+                    location.href="myartlist.html?c=1";
                 }else {
-                    alert("登陆失败"+msg);
+                    alert("登陆失败"+data.msg);
                 }
             });
 
@@ -41,7 +41,7 @@
     </script>
 </head>
 <body>
-<h1><a href="pubartlist.html">主页列表</a></h1>
+<h2><a href="reg.html" style="margin-left: 20px">注册</a><a href="pubartlist.html" style="margin-left: 20px">游客主页</a></h2>
 <div style="margin-top: 70px;text-align: center;">
     <h1>登录</h1>
     用户名<input id="username" name="username" type="text"><p></p>

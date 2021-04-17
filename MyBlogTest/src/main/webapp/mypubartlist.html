@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户主页列表</title>
+    <script src="jquery-1.9.1.min.js"></script>
+    <script>
+        var psize = 2;
+        var curpage = 0;
+        // var name = location.search.split("=")[2];
+        //时间格式化
+        function datesub(timestamp) {
+            var date = new Date();
+            var y = date.getFullYear();
+            var m = date.getMonth();
+            var d = date.getDate();
+            var t = date.getHours();
+            return y + "-" + m + "-" + d;
+        }
+        //翻页操作
+        function mypage(type){
+            if(type==1){
+                //上一页
+                if(curpage==1){
+                    alert("已经是首页了~~");
+                    return false;
+                }
+                location.href = "mypubartlist.html?c="+(curpage-1);
+            }
+            if(type==2){
+                //下一页
+                location.href = "mypubartlist.html?c="+(curpage+1);
+            }
+        }
+        //文章加载
+        jQuery(function () {
+            if(location.search!=""){
+                curpage = parseInt(location.search.split("=")[1]);
+            }else {
+                curpage = 1;
+            }
+            jQuery.getJSON("pubal", {"psize":psize,"curpage":curpage},
+                function (data) {
+                    if (data != null && data.state == 200 && data.list != null) {
+                        var html = "";
+                        for (var i = 0; i < data.list.length; i++) {
+                            var art = data.list[i];
+                            html += "<tr>\n" +
+                                "            <td>"+art.id+"</td>\n" +
+                                "            <td>"+"<a href='detail.html?id="+art.id+"'>"+art.title+"</a>"+"</td>\n" +
+                                "            <td>"+art.username+"</td>\n" +
+                                "            <td>"+datesub(art.createtime)+"</td>\n" +
+                                "        </tr>"
+                        }
+                        jQuery("#tab").append(html);
+                    } else {
+                        alert("操作失败"+data.msg);
+                    }
+                })
+        });
+    </script>
+</head>
+<body>
+<h2><a href="login.html">退出登录</a>
+    <a href="myartlist.html?c=1" style="margin-left: 20px">我的主页</a></h2>
+
+<div style="text-align: center;margin-top: 70px;">
+    <h1>用户浏览主页</h1>
+    <p></p>
+    <table id="tab" style="margin-left: 220px" border="1" cellspacing="0" width="70%">
+        <tr>
+            <td>编号</td>
+            <td>标题</td>
+            <td>作者</td>
+            <td>创建时间</td>
+        </tr>
+    </table>
+    <p></p>
+    <a href="javascript:mypage(1)">上一页</a><a href="javascript:mypage(2)">下一页</a>
+</div>
+
+</body>
+</html>

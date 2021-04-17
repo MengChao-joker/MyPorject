@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>收藏列表</title>
+    <script src="jquery-1.9.1.min.js"></script>
+    <script>
+        jQuery(function () {
+            jQuery.getJSON("flist",
+                function (data) {
+                    if (data != null && data.state == 200 && data.list != null) {
+                        var html = "";
+                        for (var i = 0; i < data.list.length; i++) {
+                            var art = data.list[i];
+                            html += "<tr>\n" +
+                                "            <td>" + art.username + "</td>\n" +
+                                "            <td>" + "<a href='detail.html?id=" + art.id + "'>" + art.title + "</a>" + "</td>\n" +
+                                "            <td>" + datesub(art.createtime) + "</td>\n" +
+                                "        </tr>"
+                        }
+                        jQuery("#tab").append(html);
+                    } else {
+                        alert("操作失败" + data.msg);
+                    }
+                })
+        });
+    </script>
+</head>
+<body>
+<div style="text-align: center;margin-top: 70px">
+    <h1>收藏列表</h1>
+    <table id="tab" style="margin-left: 220px" border="1" cellspacing="0" width="70%">
+        <tr>
+            <td>编号</td>
+            <td>标题</td>
+            <td>创建时间</td>
+        </tr>
+    </table>
+</div>
+
+</body>
+</html>
