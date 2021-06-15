@@ -21,6 +21,7 @@ public class ShowServlet extends HttpServlet {
         req.setCharacterEncoding("UTF-8");
         resp.setCharacterEncoding("UTF-8");
         resp.setContentType("application/json");
+        int page = Integer.parseInt(req.getParameter("curPage"));
         String msg = "";
         System.out.println("展示页面！");
         HttpSession session = req.getSession(false);
@@ -34,9 +35,9 @@ public class ShowServlet extends HttpServlet {
             MusicDao musicDao = new MusicDao();
             List<Music> musicList = null;
             if (musicName == null) {
-                musicList = musicDao.findMusic();
+                musicList = musicDao.findMusic(page);
             } else {
-                musicList = musicDao.fuzzySearch(musicName);
+                musicList = musicDao.fuzzySearch(musicName,page);
             }
             ObjectMapper mapper = new ObjectMapper();
             mapper.writeValue(resp.getWriter(), musicList);

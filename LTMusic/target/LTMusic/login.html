@@ -36,7 +36,7 @@
 					success:function (data) {
                         console.log(data);
                         if(data.msg===true){
-                            window.location.href="list.html?username="+data.user.username;
+                            window.location.href="list.html?username="+data.user.username+"&curPage=1";
                         }else{
                             /*window.location.reload();*/
                             $("#message").text("账号或密码错误，请重试!");

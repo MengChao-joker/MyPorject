@@ -6,10 +6,7 @@ import org.example.models.User;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +21,9 @@ public class LoginServlet extends HttpServlet {
         resp.setContentType("application/json");
         String username = req.getParameter("username");
         String password = req.getParameter("password");
+        String respCookie = "jmcCookie";
+        Cookie cookie = new Cookie("cookie",respCookie);
+        resp.addCookie(cookie);
         boolean msg = false;
         User user = null;
         //数据库操作

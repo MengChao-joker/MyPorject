@@ -13,16 +13,17 @@ import java.util.List;
 
 public class MusicDao {
     //查询所有歌曲信息
-    public List<Music> findMusic() {
+    public List<Music> findMusic(int page) {
         Connection connection = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         List<Music> musicList = new ArrayList<>();
-
+        int s = page*7-7;
         try {
             connection = DBUtils.getConnection();
-            String sql = "select * from music";
+            String sql = "select * from music limit ?,7";
             ps = connection.prepareStatement(sql);
+            ps.setInt(1,s);
             rs = ps.executeQuery();
             while (rs.next()) {
                 Music music = new Music();
@@ -62,19 +63,20 @@ public class MusicDao {
     }
 
     //通过关键字进行模糊查询
-    public List<Music> fuzzySearch(String key) {
+    public List<Music> fuzzySearch(String key,int page) {
         Connection connection = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         List<Music> musicList = new ArrayList<>();
         key = "%" + key + "%";
-
+        int s = page*7-7;
         try {
             connection = DBUtils.getConnection();
-            String sql = "select * from music where title like ? or singer like ?";
+            String sql = "select * from music where title like ? or singer like ? limit ?,7";
             ps = connection.prepareStatement(sql);
             ps.setString(1, key);
             ps.setString(2, key);
+            ps.setInt(1,s);
             rs = ps.executeQuery();
             while (rs.next()) {
                 Music music = new Music();

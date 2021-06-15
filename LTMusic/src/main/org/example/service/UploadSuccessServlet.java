@@ -39,7 +39,7 @@ public class UploadSuccessServlet extends HttpServlet {
         if(musicDao.insertMusic(music)==0){
             resp.getWriter().println("插入失败！");
         }else {
-            resp.sendRedirect("list.html?username="+user.getUsername());
+            resp.sendRedirect("list.html?username="+user.getUsername()+"&curPage=1");
         }
     }
 }
